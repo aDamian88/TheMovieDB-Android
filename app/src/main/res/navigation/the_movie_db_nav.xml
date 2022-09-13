@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/the_movie_db_nav"
+    app:startDestination="@id/searchScreenFragment">
+
+    <fragment
+        android:id="@+id/searchScreenFragment"
+        android:name="com.adamian.themoviedb.ui.fragment.SearchScreenFragment"
+        android:label="fragment_search_screen"
+        tools:layout="@layout/fragment_search_screen" >
+        <action
+            android:id="@+id/action_searchScreenFragment_to_detailsScreenFragment"
+            app:destination="@id/detailsScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsScreenFragment"
+        android:name="com.adamian.themoviedb.ui.fragment.DetailsScreenFragment"
+        android:label="fragment_details_screen"
+        tools:layout="@layout/fragment_details_screen" />
+</navigation>
