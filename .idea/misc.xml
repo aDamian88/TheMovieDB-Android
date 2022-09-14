@@ -3,7 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Alexandros/Desktop/Advantage/TheMovieDB/app/src/main/res/drawable-hdpi/search_bar_background.xml" value="0.109" />
+        <entry key="..\:/Users/Alexandros/Desktop/Advantage/TheMovieDB/app/src/main/res/drawable/ic_launcher_background.xml" value="0.158" />
+        <entry key="..\:/Users/Alexandros/Desktop/Advantage/TheMovieDB/app/src/main/res/drawable/search_icon.xml" value="0.109" />
         <entry key="..\:/Users/Alexandros/Desktop/Advantage/TheMovieDB/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Alexandros/Desktop/Advantage/TheMovieDB/app/src/main/res/layout/fragment_details_screen.xml" value="0.12635869565217392" />
+        <entry key="..\:/Users/Alexandros/Desktop/Advantage/TheMovieDB/app/src/main/res/layout/fragment_search_screen.xml" value="0.1" />
+        <entry key="..\:/Users/Alexandros/Desktop/Advantage/TheMovieDB/app/src/main/res/layout/movie_item.xml" value="0.12635869565217392" />
       </map>
     </option>
   </component>

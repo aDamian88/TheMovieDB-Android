@@ -1,27 +1,60 @@
 package com.adamian.themoviedb.ui.fragment
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.adamian.themoviedb.R
+import com.adamian.themoviedb.databinding.FragmentSearchScreenBinding
+import com.adamian.themoviedb.ui.TheMovieViewModel
+import com.adamian.themoviedb.utils.Constants.MIN_SEARCH_CHARACTERS
+import com.adamian.themoviedb.utils.Constants.SEARCH_DELAY
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchScreenFragment : Fragment() {
+class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private lateinit var binding: FragmentSearchScreenBinding
+    private val viewModel: TheMovieViewModel by viewModels()
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentSearchScreenBinding.bind(view)
+        searchListener()
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_screen, container, false)
+    private fun searchListener() {
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            var job: Job? = null
+
+
+            override fun afterTextChanged(searchQuery: Editable?) {
+                job?.cancel()
+                job = MainScope().launch {
+                    delay(SEARCH_DELAY)
+                    searchQuery?.let {
+                        if (searchQuery.length >= MIN_SEARCH_CHARACTERS) {
+                            viewModel.searchMovies(searchQuery.toString())
+                            // displayResults()
+                        } else {
+                            // emptyResults()
+                        }
+                    }
+                }
+            }
+        })
     }
 
 }

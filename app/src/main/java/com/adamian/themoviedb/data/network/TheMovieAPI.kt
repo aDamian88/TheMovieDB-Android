@@ -8,10 +8,10 @@ import retrofit2.http.Query
 interface TheMovieAPI {
 
     @GET("search/multi")
-    suspend fun searchForMovies(
+    suspend fun searchMoviesTvShows(
         @Query("api_key") apiKey: String,
         @Query("query") query: String,
         @Query("page") page: String
-    ): Response<MultiMovieResponse>
+    ): MultiMovieResponse
 
 }
