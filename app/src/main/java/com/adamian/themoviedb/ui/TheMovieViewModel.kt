@@ -18,7 +18,8 @@ class TheMovieViewModel @Inject constructor(
     val searchMoviesTvShows: MutableLiveData<MultiMovieResponse> = MutableLiveData()
 
     fun searchMovies(searchQuery: String) = viewModelScope.launch {
-        val response = theMovieRepositoryImpl.searchMoviesTvShows(searchQuery);
+        val response = theMovieRepositoryImpl.searchMoviesTvShows(searchQuery)
+        searchMoviesTvShows.postValue(response)
         Log.d(TAG, "searchMovies: ${response.results}")
     }
 
