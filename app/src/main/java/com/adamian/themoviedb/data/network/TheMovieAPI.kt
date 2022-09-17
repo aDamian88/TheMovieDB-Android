@@ -1,7 +1,6 @@
 package com.adamian.themoviedb.data.network
 
 import com.adamian.themoviedb.data.network.model.MultiMovieResponse
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 

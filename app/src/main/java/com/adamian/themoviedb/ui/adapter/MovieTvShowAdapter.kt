@@ -1,12 +1,18 @@
 package com.adamian.themoviedb.ui.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.adamian.themoviedb.data.network.model.MovieTvShow
 import com.adamian.themoviedb.databinding.MovieItemBinding
+import com.adamian.themoviedb.utils.Constants.getPosterPath
+import com.bumptech.glide.Glide
 
-class MovieTvShowAdapter(private val MovieTvShowList: List<MovieTvShow>) :
+class MovieTvShowAdapter(
+    private val context: Context,
+    private val MovieTvShowList: List<MovieTvShow>
+) :
 
     RecyclerView.Adapter<MovieTvShowAdapter.ViewHolder>() {
 
@@ -37,6 +43,7 @@ class MovieTvShowAdapter(private val MovieTvShowList: List<MovieTvShow>) :
         fun bindItem(movieTvShow: MovieTvShow) {
             itemBinding.tvTitle.text = movieTvShow.title
             itemBinding.tvReleaseDate.text = movieTvShow.releaseDate
+            Glide.with(context).load(getPosterPath(movieTvShow.posterPath)).into(itemBinding.imMovieIcon)
         }
     }
 }
