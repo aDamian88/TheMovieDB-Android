@@ -23,7 +23,7 @@ class MovieMapper @Inject constructor(
         emit(movieDetailsResponse.toMovieDisplay(youtubeKey, true))
     }
 
-    fun MovieDetailsResponse.toMovieDisplay(
+    private fun MovieDetailsResponse.toMovieDisplay(
         youtubeKey: String,
         isLocalStored: Boolean
     ): MovieDisplay {

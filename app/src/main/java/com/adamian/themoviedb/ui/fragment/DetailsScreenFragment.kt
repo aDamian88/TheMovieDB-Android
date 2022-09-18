@@ -1,6 +1,7 @@
 package com.adamian.themoviedb.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -35,11 +36,13 @@ class DetailsScreenFragment : Fragment(R.layout.fragment_details_screen) {
 
     private fun observeViewModel() {
         viewModel.getMovie.observe(viewLifecycleOwner) { response ->
-            Glide.with(context!!).load(
-                Constants.getPosterPath(
-                    response.posterPath
-                )
-            ).into(binding.ivPoster)
+            if (response.posterPath != null) {
+                Glide.with(context!!).load(
+                    Constants.getPosterPath(
+                        response.posterPath
+                    )
+                ).into(binding.ivPoster)
+            }
             binding.tvTitle.text = response.title
             binding.tvOverview.text = response.overview
             binding.tvGenre.text = response.genre

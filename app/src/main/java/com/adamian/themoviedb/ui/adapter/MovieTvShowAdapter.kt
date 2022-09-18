@@ -1,6 +1,7 @@
 package com.adamian.themoviedb.ui.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -52,10 +53,17 @@ class MovieTvShowAdapter(
     inner class ViewHolder(val itemBinding: MovieItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bindItem(movieTvShow: MovieTvShow) {
-            itemBinding.tvTitle.text = movieTvShow.title
+            if (movieTvShow.mediaType == "movie") {
+                itemBinding.tvTitle.text = movieTvShow.title
+            } else {
+                itemBinding.tvTitle.text = movieTvShow.name
+            }
+
             itemBinding.tvReleaseDate.text = movieTvShow.releaseDate
-            Glide.with(context).load(getPosterPath(movieTvShow.posterPath))
-                .into(itemBinding.imMovieIcon)
+            if (movieTvShow.posterPath != null) {
+                Glide.with(context).load(getPosterPath(movieTvShow.posterPath))
+                    .into(itemBinding.imMovieIcon)
+            }
         }
     }
 }
