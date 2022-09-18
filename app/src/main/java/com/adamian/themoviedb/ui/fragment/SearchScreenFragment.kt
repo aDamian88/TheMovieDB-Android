@@ -49,7 +49,7 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
                     delay(SEARCH_DELAY)
                     searchQuery?.let {
                         if (searchQuery.length >= MIN_SEARCH_CHARACTERS) {
-                            viewModel.searchMovies(searchQuery.toString())
+                            viewModel.searchMoviesTvShowsBar(searchQuery.toString())
                             displayResults()
                         } else {
                             // emptyResults()
@@ -72,12 +72,17 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
     }
 
     private fun setMovieTvShowList(movieTvShowList: List<MovieTvShow>) {
-        recyclerAdapter = MovieTvShowAdapter(context!!,movieTvShowList)
+        recyclerAdapter = MovieTvShowAdapter(context!!, movieTvShowList
+            .filter { movieTvShow ->
+                movieTvShow.mediaType == "movie" ||
+                        movieTvShow.mediaType == "tv"
+            })
         binding.rvSearchMovie.adapter = recyclerAdapter
 
         (recyclerAdapter as MovieTvShowAdapter).setOnItemClickListener {
             val bundle = Bundle()
-            bundle.putString("movieId", it.id.toString())
+            bundle.putString("id", it.id.toString())
+            bundle.putString("type", it.mediaType)
             findNavController().navigate(
                 R.id.action_searchScreenFragment_to_detailsScreenFragment,
                 bundle

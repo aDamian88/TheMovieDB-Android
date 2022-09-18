@@ -1,8 +1,8 @@
 package com.adamian.themoviedb.domain.model
 
-class MovieDisplay(
+class MovieTvShowDisplay(
     val id: Int,
-    val genre: String,
+    val genre: String?,
     val overview: String,
     val posterPath: String?,
     val title: String,

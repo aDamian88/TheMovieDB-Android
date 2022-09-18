@@ -1,7 +1,6 @@
 package com.adamian.themoviedb.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -25,8 +24,9 @@ class DetailsScreenFragment : Fragment(R.layout.fragment_details_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDetailsScreenBinding.bind(view)
-        val movieId = getArguments()?.getString("movieId")
-        viewModel.getMovieDetails(movieId!!)
+        val id = arguments?.getString("id")!!
+        val type = arguments?.getString("type")!!
+        viewModel.getMovieTvShowDetails(id,type)
         observeViewModel()
 
         binding.ivArrowBack.setOnClickListener {
@@ -35,7 +35,7 @@ class DetailsScreenFragment : Fragment(R.layout.fragment_details_screen) {
     }
 
     private fun observeViewModel() {
-        viewModel.getMovie.observe(viewLifecycleOwner) { response ->
+        viewModel.getMovieTvShow.observe(viewLifecycleOwner) { response ->
             if (response.posterPath != null) {
                 Glide.with(context!!).load(
                     Constants.getPosterPath(
@@ -45,7 +45,7 @@ class DetailsScreenFragment : Fragment(R.layout.fragment_details_screen) {
             }
             binding.tvTitle.text = response.title
             binding.tvOverview.text = response.overview
-            binding.tvGenre.text = response.genre
+            binding.tvGenre.text = response.genre!!
             setYoutubePlayer(response.trailerKey)
             setStoreIcon(response.isStored)
         }

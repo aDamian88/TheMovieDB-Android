@@ -1,8 +1,9 @@
 package com.adamian.themoviedb.data.network
 
 import com.adamian.themoviedb.data.network.model.MovieDetailsResponse
-import com.adamian.themoviedb.data.network.model.MovieVideoResponse
+import com.adamian.themoviedb.data.network.model.MovieTvShowVideoResponse
 import com.adamian.themoviedb.data.network.model.MultiMovieResponse
+import com.adamian.themoviedb.data.network.model.TvShowDetailsResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -26,17 +27,17 @@ interface TheMovieAPI {
     suspend fun getMovieVideos(
         @Path("movieId") movieId: String,
         @Query("api_key") apiKey: String,
-    ): MovieVideoResponse
+    ): MovieTvShowVideoResponse
 
     @GET("tv/{tvShowId}")
     suspend fun getTvShowDetails(
         @Path("tvShowId") tvShowId: String,
         @Query("api_key") apiKey: String,
-    )
+    ): TvShowDetailsResponse
 
     @GET("tv/{tvShowId}/videos")
     suspend fun getTvShowVideos(
         @Path("tvShowId") tvShowId: String,
         @Query("api_key") apiKey: String,
-    )
+    ): MovieTvShowVideoResponse
 }
