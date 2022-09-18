@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adamian.themoviedb.R
@@ -65,6 +66,7 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
 
     private fun observeViewModel() {
         viewModel.searchMoviesTvShows.observe(viewLifecycleOwner) { response ->
+            binding.tvResults.text = response.totalResults.toString()
             setMovieTvShowList(response.results)
         }
     }
@@ -72,6 +74,15 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
     private fun setMovieTvShowList(movieTvShowList: List<MovieTvShow>) {
         recyclerAdapter = MovieTvShowAdapter(context!!,movieTvShowList)
         binding.rvSearchMovie.adapter = recyclerAdapter
+
+        (recyclerAdapter as MovieTvShowAdapter).setOnItemClickListener {
+            val bundle = Bundle()
+            bundle.putString("movieId", it.id.toString())
+            findNavController().navigate(
+                R.id.action_searchScreenFragment_to_detailsScreenFragment,
+                bundle
+            )
+        }
     }
 
     private fun displayResults() {

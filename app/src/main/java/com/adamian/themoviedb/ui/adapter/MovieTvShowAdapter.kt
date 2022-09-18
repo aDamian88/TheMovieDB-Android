@@ -9,6 +9,7 @@ import com.adamian.themoviedb.databinding.MovieItemBinding
 import com.adamian.themoviedb.utils.Constants.getPosterPath
 import com.bumptech.glide.Glide
 
+
 class MovieTvShowAdapter(
     private val context: Context,
     private val MovieTvShowList: List<MovieTvShow>
@@ -36,6 +37,16 @@ class MovieTvShowAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val displayItem = MovieTvShowList[position]
         holder.bindItem(displayItem)
+
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.let { it(displayItem) }
+        }
+    }
+
+    private var onItemClickListener: ((MovieTvShow) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (MovieTvShow) -> Unit) {
+        onItemClickListener = listener
     }
 
     inner class ViewHolder(val itemBinding: MovieItemBinding) :
@@ -43,7 +54,8 @@ class MovieTvShowAdapter(
         fun bindItem(movieTvShow: MovieTvShow) {
             itemBinding.tvTitle.text = movieTvShow.title
             itemBinding.tvReleaseDate.text = movieTvShow.releaseDate
-            Glide.with(context).load(getPosterPath(movieTvShow.posterPath)).into(itemBinding.imMovieIcon)
+            Glide.with(context).load(getPosterPath(movieTvShow.posterPath))
+                .into(itemBinding.imMovieIcon)
         }
     }
 }
