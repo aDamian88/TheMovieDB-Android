@@ -1,5 +1,6 @@
 package com.adamian.themoviedb.domain.repository
 
+import com.adamian.themoviedb.data.local.model.MovieTvShowEntity
 import com.adamian.themoviedb.data.network.model.MovieDetailsResponse
 import com.adamian.themoviedb.data.network.model.MovieTvShowVideoResponse
 import com.adamian.themoviedb.data.network.model.MultiMovieResponse
@@ -15,5 +16,11 @@ interface TheMovieRepository {
 
     suspend fun getMovieVideo(movieId: String): MovieTvShowVideoResponse
 
-    suspend fun getTvShowVideo(movieId: String): MovieTvShowVideoResponse
+    suspend fun getTvShowVideo(tvShowId: String): MovieTvShowVideoResponse
+
+    suspend fun saveMovieTvShowEntity(movieTvShowEntity: MovieTvShowEntity)
+
+    suspend fun isEntityExistsOnDatabase(id: Int, type: String): Boolean
+
+    suspend fun deleteEntity(id: Int, type: String)
 }

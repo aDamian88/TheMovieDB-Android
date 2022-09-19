@@ -1,5 +1,10 @@
 package com.adamian.themoviedb.di
 
+import android.app.Application
+import android.content.Context
+import androidx.room.Room
+import com.adamian.themoviedb.data.local.AppDao
+import com.adamian.themoviedb.data.local.ApplicationDatabase
 import com.adamian.themoviedb.data.network.TheMovieAPI
 import com.adamian.themoviedb.data.repository.TheMovieRepositoryImpl
 import com.adamian.themoviedb.domain.repository.TheMovieRepository
@@ -7,6 +12,7 @@ import com.adamian.themoviedb.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -17,6 +23,24 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideApplicationDatabase(app: Application): ApplicationDatabase {
+        return Room.databaseBuilder(
+            app,
+            ApplicationDatabase::class.java,
+            "the_movie_db.db"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideApplicationDao(
+        database: ApplicationDatabase
+    ): AppDao {
+        return database.appDao()
+    }
 
     @Provides
     @Singleton
@@ -40,7 +64,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTheMovieRepository(theMovieAPI: TheMovieAPI): TheMovieRepository {
-        return TheMovieRepositoryImpl(theMovieAPI)
+    fun provideTheMovieRepository(theMovieAPI: TheMovieAPI, appDao: AppDao): TheMovieRepository {
+        return TheMovieRepositoryImpl(theMovieAPI, appDao)
     }
 }

@@ -55,11 +55,12 @@ class MovieTvShowAdapter(
         fun bindItem(movieTvShow: MovieTvShow) {
             if (movieTvShow.mediaType == "movie") {
                 itemBinding.tvTitle.text = movieTvShow.title
+                itemBinding.tvReleaseDate.text = movieTvShow.releaseDate
             } else {
                 itemBinding.tvTitle.text = movieTvShow.name
+                itemBinding.tvReleaseDate.text = movieTvShow.firstAirDate
             }
 
-            itemBinding.tvReleaseDate.text = movieTvShow.releaseDate
             if (movieTvShow.posterPath != null) {
                 Glide.with(context).load(getPosterPath(movieTvShow.posterPath))
                     .into(itemBinding.imMovieIcon)

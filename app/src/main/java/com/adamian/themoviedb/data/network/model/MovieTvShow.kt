@@ -14,4 +14,6 @@ class MovieTvShow(
     val voteAverage: Double,
     @SerializedName("release_date")
     val releaseDate: String,
+    @SerializedName("first_air_date")
+    val firstAirDate: String,
 )

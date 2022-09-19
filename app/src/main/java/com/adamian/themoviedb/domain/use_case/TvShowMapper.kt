@@ -14,13 +14,14 @@ class TvShowMapper @Inject constructor(
     operator fun invoke(tvShowId: String): Flow<MovieTvShowDisplay> = flow {
         val tvShowDetailsResponse = repository.getTvShowDetails(tvShowId)
         var youtubeKey = ""
-        val tvShowVideoList = repository.getTvShowVideo(tvShowDetailsResponse.id.toString())
+        val tvShowVideoList = repository.getTvShowVideo(tvShowId)
         tvShowVideoList.results.forEach {
             if (it.type == "Trailer") {
                 youtubeKey = it.key
             }
         }
-        emit(tvShowDetailsResponse.toMovieTvShowDisplay(youtubeKey, true))
+        val isLocalStored = repository.isEntityExistsOnDatabase(tvShowDetailsResponse.id, "tv")
+        emit(tvShowDetailsResponse.toMovieTvShowDisplay(youtubeKey, isLocalStored))
     }
 
     private fun TvShowDetailsResponse.toMovieTvShowDisplay(
@@ -34,7 +35,8 @@ class TvShowMapper @Inject constructor(
             posterPath = posterPath,
             title = name,
             trailerKey = youtubeKey,
-            isStored = isLocalStored
+            isStored = isLocalStored,
+            releaseDate = firstAirDate
         )
     }
 

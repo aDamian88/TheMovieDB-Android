@@ -1,6 +1,6 @@
 package com.adamian.themoviedb.data.network.model
 
-data class MovieVideo(
+data class MovieTvShowVideo(
     val id: String,
     val key: String,
     val type: String
