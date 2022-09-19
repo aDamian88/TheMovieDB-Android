@@ -17,8 +17,8 @@ class TheMovieRepositoryImpl @Inject constructor(
     private val dao: AppDao
 ) : TheMovieRepository {
 
-    override suspend fun searchMoviesTvShows(searchQuery: String): MultiMovieResponse {
-        return theMovieAPI.searchMoviesTvShows(AUTH_KEY, searchQuery, "1")
+    override suspend fun searchMoviesTvShows(searchQuery: String, page: String): MultiMovieResponse {
+        return theMovieAPI.searchMoviesTvShows(AUTH_KEY, searchQuery, page)
     }
 
     override suspend fun getMovieDetails(movieId: String): MovieDetailsResponse {

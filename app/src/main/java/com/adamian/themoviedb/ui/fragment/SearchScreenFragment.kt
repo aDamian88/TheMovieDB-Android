@@ -3,8 +3,10 @@ package com.adamian.themoviedb.ui.fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.View
+import android.widget.AbsListView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +16,7 @@ import com.adamian.themoviedb.data.network.model.MovieTvShow
 import com.adamian.themoviedb.databinding.FragmentSearchScreenBinding
 import com.adamian.themoviedb.ui.TheMovieViewModel
 import com.adamian.themoviedb.ui.adapter.MovieTvShowAdapter
+import com.adamian.themoviedb.utils.Constants
 import com.adamian.themoviedb.utils.Constants.MIN_SEARCH_CHARACTERS
 import com.adamian.themoviedb.utils.Constants.SEARCH_DELAY
 import com.adamian.themoviedb.utils.DataSource
@@ -22,6 +25,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
@@ -74,7 +78,12 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
     }
 
     private fun setupRecyclerView() {
-        binding.rvSearchMovie.layoutManager = LinearLayoutManager(activity)
+        recyclerAdapter = MovieTvShowAdapter(context!!)
+        binding.rvSearchMovie.apply {
+            adapter = recyclerAdapter
+            layoutManager = LinearLayoutManager(activity)
+            addOnScrollListener(scrollListener)
+        }
     }
 
     private fun observeViewModel() {
@@ -85,14 +94,14 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
     }
 
     private fun setMovieTvShowList(movieTvShowList: List<MovieTvShow>) {
-        recyclerAdapter = MovieTvShowAdapter(context!!, movieTvShowList
+        (recyclerAdapter as MovieTvShowAdapter).differ.submitList(movieTvShowList
             .filter { movieTvShow ->
                 movieTvShow.mediaType == "movie" ||
                         movieTvShow.mediaType == "tv"
             })
+
+
         binding.rvSearchMovie.adapter = recyclerAdapter
-        binding.tvResults.text =
-            (recyclerAdapter as MovieTvShowAdapter).itemCount.toString() + " " + getText(R.string.results)
 
         (recyclerAdapter as MovieTvShowAdapter).setOnItemClickListener {
             val bundle = Bundle()
@@ -127,4 +136,38 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
         binding.llResults.visibility = View.GONE
     }
 
+    var isLoading = false
+    var isLastPage = false
+    var isScrolling = false
+
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+            val visibleItemCount = layoutManager.childCount
+            val totalItemCount = layoutManager.itemCount
+            val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
+
+            val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
+            val isNotAtBeginning = firstVisibleItemPosition >= 0
+            val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
+                    isScrolling
+            if (shouldPaginate) {
+                viewModel.searchMoviesTvShowsBar(binding.etSearch.text.toString(), currentDataSource)
+                isScrolling = false
+            } else {
+                binding.rvSearchMovie.setPadding(0, 0, 0, 0)
+            }
+        }
+
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                isScrolling = true
+            }
+        }
+    }
 }
+

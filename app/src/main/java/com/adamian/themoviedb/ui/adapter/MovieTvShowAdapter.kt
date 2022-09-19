@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adamian.themoviedb.data.network.model.MovieTvShow
 import com.adamian.themoviedb.databinding.MovieItemBinding
@@ -12,11 +14,22 @@ import com.bumptech.glide.Glide
 
 
 class MovieTvShowAdapter(
-    private val context: Context,
-    private val MovieTvShowList: List<MovieTvShow>
+    private val context: Context
 ) :
 
     RecyclerView.Adapter<MovieTvShowAdapter.ViewHolder>() {
+
+    private val differCallback = object : DiffUtil.ItemCallback<MovieTvShow>() {
+        override fun areItemsTheSame(oldItem: MovieTvShow, newItem: MovieTvShow): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: MovieTvShow, newItem: MovieTvShow): Boolean {
+            return oldItem.equals(newItem)
+        }
+    }
+
+    val differ = AsyncListDiffer(this, differCallback)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -32,11 +45,11 @@ class MovieTvShowAdapter(
     }
 
     override fun getItemCount(): Int {
-        return MovieTvShowList.size
+        return differ.currentList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val displayItem = MovieTvShowList[position]
+        val displayItem = differ.currentList[position]
         holder.bindItem(displayItem)
 
         holder.itemView.setOnClickListener {

@@ -8,7 +8,7 @@ import com.adamian.themoviedb.data.network.model.TvShowDetailsResponse
 
 interface TheMovieRepository {
 
-    suspend fun searchMoviesTvShows(searchQuery: String): MultiMovieResponse
+    suspend fun searchMoviesTvShows(searchQuery: String, page: String): MultiMovieResponse
 
     suspend fun getMovieDetails(movieId: String): MovieDetailsResponse
 

@@ -1,8 +1,11 @@
 package com.adamian.themoviedb.ui
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.adamian.themoviedb.data.network.model.MovieTvShow
+import com.adamian.themoviedb.data.network.model.MultiMovieResponse
 import com.adamian.themoviedb.data.repository.TheMovieRepositoryImpl
 import com.adamian.themoviedb.domain.model.MovieTvShowDisplay
 import com.adamian.themoviedb.domain.model.SearchScreenDisplay
@@ -24,14 +27,37 @@ class TheMovieViewModel @Inject constructor(
 ) : ViewModel() {
     val searchMoviesTvShows: MutableLiveData<SearchScreenDisplay> = MutableLiveData()
     val getMovieTvShow: MutableLiveData<MovieTvShowDisplay> = MutableLiveData()
+    private var page = 0
+    var totalList: List<MovieTvShow> = emptyList()
+    var searchResponse: MultiMovieResponse? = null
 
     fun searchMoviesTvShowsBar(searchQuery: String, currentDataSource: DataSource) =
         viewModelScope.launch {
+            page++
+            Log.d("TAG", "searchMoviesTvShowsBar: pageee: $page")
+
+            val currentResponse =
+                theMovieRepositoryImpl.searchMoviesTvShows(searchQuery, page.toString())
 
             if (currentDataSource == DataSource.API) {
-                val response = theMovieRepositoryImpl.searchMoviesTvShows(searchQuery).results
-                val searchScreenDisplay = SearchScreenDisplay(dataSource = DataSource.API, response)
-                searchMoviesTvShows.postValue(searchScreenDisplay)
+                if (searchResponse == null) {
+                    searchResponse = currentResponse
+                    val searchScreenDisplay =
+                        SearchScreenDisplay(dataSource = DataSource.API, searchResponse!!.results)
+                    searchMoviesTvShows.postValue(searchScreenDisplay)
+                } else {
+                    val oldSearch = searchResponse?.results
+                    val newSearch = currentResponse.results
+                    oldSearch?.addAll(newSearch)
+
+                    val searchScreenDisplay =
+                        SearchScreenDisplay(dataSource = DataSource.API, oldSearch!!)
+                    searchMoviesTvShows.postValue(searchScreenDisplay)
+
+                }
+//                totalList += response
+
+
             } else {
                 dataFromDatabase.invoke(searchQuery).collectLatest { result ->
                     val searchScreenDisplay = SearchScreenDisplay(DataSource.LOCAL, result)
