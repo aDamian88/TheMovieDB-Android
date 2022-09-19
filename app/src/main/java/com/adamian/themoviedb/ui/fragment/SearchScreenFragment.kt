@@ -114,7 +114,6 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
         } else {
             binding.btSwitchResource.text = getText(R.string.display_the_watchlist)
         }
-
     }
 
     private fun displayResults() {
