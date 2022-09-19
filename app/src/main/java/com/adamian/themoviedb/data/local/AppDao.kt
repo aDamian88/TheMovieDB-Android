@@ -19,7 +19,7 @@ interface AppDao {
     @Query("SELECT * FROM MovieTvShowEntity")
     suspend fun getAllMovieTvShows(): List<MovieTvShowEntity>
 
-    @Query("SELECT * FROM MovieTvShowEntity WHERE title LIKE :query ")
+    @Query("SELECT * FROM MovieTvShowEntity WHERE title LIKE '%' || :query || '%' ")
     suspend fun searchMovieTvShows(query: String): List<MovieTvShowEntity>
 
     @Query("SELECT EXISTS(SELECT * FROM MovieTvShowEntity WHERE id = :id AND mediaType = :type)")

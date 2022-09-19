@@ -23,4 +23,8 @@ interface TheMovieRepository {
     suspend fun isEntityExistsOnDatabase(id: Int, type: String): Boolean
 
     suspend fun deleteEntity(id: Int, type: String)
+
+    suspend fun getAllStoredData(): List<MovieTvShowEntity>
+
+    suspend fun searchFromDatabase(query: String): List<MovieTvShowEntity>
 }

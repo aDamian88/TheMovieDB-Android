@@ -49,4 +49,12 @@ class TheMovieRepositoryImpl @Inject constructor(
         dao.deleteEntityByIdAndType(id,type)
     }
 
+    override suspend fun getAllStoredData(): List<MovieTvShowEntity> {
+        return dao.getAllMovieTvShows()
+    }
+
+    override suspend fun searchFromDatabase(query: String): List<MovieTvShowEntity> {
+        return dao.searchMovieTvShows(query)
+    }
+
 }

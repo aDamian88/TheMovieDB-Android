@@ -5,4 +5,7 @@
     <string name="a_little_empty">A little empty</string>
     <string name="a_little_empty_details">Search for a movie and \n save it as favourite</string>
     <string name="play_trailer">Trailer</string>
+    <string name="get_data_from_api">Get data from API</string>
+    <string name="display_the_watchlist">Display the watchlist</string>
+    <string name="results">results</string>
 </resources>
